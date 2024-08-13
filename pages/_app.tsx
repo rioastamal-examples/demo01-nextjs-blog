@@ -3,6 +3,13 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import "../styles/main.css";
 
+import { Amplify } from 'aws-amplify';
+import { Authenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css'; // default theme
+import outputs from "../amplify_outputs.json";
+
+Amplify.configure(outputs, {ssr: true});
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -21,7 +28,10 @@ export default function App({ Component, pageProps }: AppProps) {
           crossOrigin="anonymous"
         />
       </Head>
-      <Component {...pageProps} />
+      <Authenticator.Provider>
+        <Component {...pageProps} />
+      </Authenticator.Provider>
+      {/* <Component {...pageProps} /> */}
     </>
   );
 }
