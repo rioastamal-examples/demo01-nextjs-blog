@@ -16,7 +16,7 @@ export default function Index() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      window.location.href = '/profile'
+      window.location.href = '/admin/profile'
     }
   }, [isAuthenticated]);
 
@@ -26,10 +26,8 @@ export default function Index() {
       <title>Sign in using Authenticator</title>
     </Head>
 
-    <div style={{paddingTop: 3 + 'rem'}} className="article"></div>
-
-    <Authenticator signUpAttributes={['name']}>
-      {({ signOut, user }) => (
+    <Authenticator>
+      {({ user }) => (
         <main>
           <h1>Logged in as {user.username}</h1>
           <p>Redirecting, please wait...</p>
@@ -38,4 +36,12 @@ export default function Index() {
     </Authenticator>
     </>
   )
+}
+
+export function getStaticProps() {
+  return {
+    props: {
+      currentPage: '/login'
+    }
+  }
 }

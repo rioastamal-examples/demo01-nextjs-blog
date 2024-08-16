@@ -18,6 +18,8 @@ function Index() {
       return;
     }
 
+    console.log(authStatus);
+    
     if (!isAuthenticated) {
       window.location.href = '/login';
       console.log('redirecting to /login');
@@ -27,12 +29,18 @@ function Index() {
 
   return (
     <>
-      <div style={{ paddingTop: '3rem' }} className="article"></div>
       <h1>My Profile</h1>
-      <hr />
       {isAuthenticated ? <div>Authenticated | <Link href="/logout">Logout</Link></div> : null}
     </>
   );
 }
 
 export default Index;
+
+export function getStaticProps() {
+  return {
+    props: {
+      currentPage: '/admin/profile'
+    }
+  }
+}

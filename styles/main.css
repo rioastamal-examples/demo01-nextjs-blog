@@ -81,3 +81,12 @@ img.next-image {
 .nav-line .nav-link {
   color: #69778c;
 }
+
+article {
+  padding-top: 1em;
+}
+
+footer {
+  text-align: center;
+  margin-top: 1rem;
+}

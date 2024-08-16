@@ -23,8 +23,10 @@ export default function Document() {
         <meta name="twitter:image" content={meta.image} />
       </Head>
       <body>
+
         <Main />
         <NextScript />
+
       </body>
     </Html>
   );
