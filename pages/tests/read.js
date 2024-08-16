@@ -6,45 +6,6 @@ function isObject(value) {
   return Object.prototype.toString.call(value) === '[object Object]';
 }
 
-function ReadFromDb() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const client = generateClient();
-        const response = await client.models.User.list({
-          limit: 50
-        }, { authMode: 'userPool' });
-
-        console.log(response);
-
-        if (response.hasOwnProperty('errors')) {
-          setError(response.errors);
-        } else {
-          setUsers(response.data);
-        }
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  return (
-    <ul>
-      {users.map((user) => (
-        <li key={user.id}>{user.name} - {user.email}</li>
-      ))}
-    </ul>
-  );
-}
-
 function Index() {
   const { authStatus, user } = useAuthenticator(context => [context.authStatus, context.user]);
   console.log('isObject =>', isObject(user));
