@@ -11,6 +11,7 @@
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.2.13",
     "@aws-amplify/ui-react": "^6.1.14",
+    "@aws-amplify/ui-react-storage": "^3.2.0",
     "aws-amplify": "^6.5.0",
     "gray-matter": "^4.0.3",
     "next": "latest",

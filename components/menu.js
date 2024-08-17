@@ -35,6 +35,7 @@ function PageMenu({ menus, currentPage }) {
         { 'href': '/admin/profile', 'label': 'Profile' },
         { 'href': '/admin/posts/write', 'label': 'Write' },
         { 'href': '/admin/posts/list', 'label': 'My Posts' },
+        { 'href': '/admin/media/upload', 'label': 'Media' },
         { 'href': '/logout', 'label': 'Sign out' },
       ];
       setDefaultMenus([...defaultMenus, ...loggedInMenus]);

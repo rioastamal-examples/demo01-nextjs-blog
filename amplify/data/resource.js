@@ -50,6 +50,7 @@ const schema = a.schema({
       profile: a.string(),
       posts: a.hasMany('Post', 'authorId'),
       comments: a.hasMany('Comment', 'authorId'),
+      media: a.hasMany('Media', 'userId'),
   })
   .identifier(['userId'])
   .authorization(allow => [    
@@ -75,6 +76,24 @@ const schema = a.schema({
     allow.publicApiKey().to(['read']),
 
     // Allow only owner to create and delete the comment
+    allow.owner().to(['create', 'read', 'delete']),
+
+    // ADMINS rule them all
+    allow.group('ADMINS')
+  ]),
+
+  Media: a.model({
+      mediaId: a.id().required(),
+      path: a.string(),
+      userId: a.id(),
+      user: a.belongsTo('User', 'userId')
+  })
+  .identifier(['mediaId'])
+  .authorization(allow => [
+    // Allow public to read the media
+    allow.publicApiKey().to(['read']),
+
+    // Allow only owner to create and delete the media
     allow.owner().to(['create', 'read', 'delete']),
 
     // ADMINS rule them all
