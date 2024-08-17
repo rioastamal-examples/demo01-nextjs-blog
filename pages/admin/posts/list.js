@@ -64,9 +64,13 @@ function Index() {
     <>
       <h1>My Posts</h1>
       { loading && <Loader variation="linear" size="small" /> }
+      { !loading && posts.length === 0 && <p>No posts found</p> }
       <ul>
         {posts.map((_post) => (
-          <li key={_post.postId}>{_post.title}</li>
+          <li key={_post.postId}>
+            <a style={{ marginRight: '0.5rem' }}href={`/posts/${_post.slug}`}>{_post.title}</a>
+            <a onClick={(e) => { window.alert('Your task: Implement this feature!'); e.preventDefault()}} title="edit" href="#">[Edit]</a>
+          </li>
         ))}
       </ul>      
     </>
