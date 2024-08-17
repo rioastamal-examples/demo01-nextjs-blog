@@ -63,7 +63,7 @@ function Index() {
         {users.map((_user) => (
           <li key={_user.userId}>{_user.name} - {_user.email}</li>
         ))}
-      </ul>      
+      </ul>
     </>
   );
 }
