@@ -1,7 +1,6 @@
 import { fetchAuthSession } from 'aws-amplify/auth/server';
-import { runWithAmplifyServerContext, AuthGetCurrentUserServer, cookiesClient } from '../../../libs/server-utils';
+import { runWithAmplifyServerContext, AuthGetCurrentUserServer, cookiesClient } from '../../../../libs/server-utils';
 import { cookies } from 'next/headers';
-import slugify from '../../../libs/slugify';
 
 export async function POST(request) {
   const authenticated = await runWithAmplifyServerContext({
@@ -27,37 +26,46 @@ export async function POST(request) {
   try {
     // Get the request body
     const requestData = await request.json();
-    // Access the JSON data
-    console.log(requestData);
-    const { title, summary, content, tags, slug } = requestData;
-    const slugText = slugify(title);
 
     // Access the current user
     const user = await AuthGetCurrentUserServer();
     console.log('user =>', user);
 
-    const item = {
-      postId: `${user.userId}#${slugText}`,
-      title: title,
-      summary: summary,
-      content: content,
-      tags: tags.split(',').map((tag) => tag.trim()),
-      slug: slugText,
-      authorId: user.userId,
-      published: true
-    };
-    console.log('item =>', item);
-
-    const {errors} = await cookiesClient.models.Post.create(item, {
-      authMode: 'userPool'
-    });
-
+    // Get current user data from database
+    const { data, errors } = await cookiesClient.models.User.get(
+      { userId: user.userId },
+      { authMode: 'userPool' }
+    );
+    console.log('currentUser =>', data);
+    
     if (errors) {
+      return Response.json({ "message": errors[0].message }, { status: 400 });
+    }
+
+    if (data) {
+      // No need to create a new user
+      console.log('User already exists');
+      return Response.json({ "message": "User already exists" }, { status: 200 });
+    }
+
+    // Create a new user
+    console.log('Creating a new user');
+    const item = {
+      userId: user.userId
+    }
+
+    console.log('item =>', item);
+    const responseCreate = await cookiesClient.models.User.create(
+      item,
+      { authMode: 'userPool' }
+    );
+
+    if (responseCreate?.errors) {
       return Response.json({ "message": errors[0].message }, { status: 400 });
     }
 
     return Response.json({ "message": "Data successfully written" });
   } catch (error) {
-    return Response.json({ "message": error.toString() }, { status: 400 });
+    return Response.json({ "message": error.toString() }, { status: 403 });
   }
 }

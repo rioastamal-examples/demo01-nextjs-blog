@@ -32,6 +32,7 @@ function PageMenu({ menus, currentPage }) {
       defaultMenus = menus.slice();
       const loggedInMenus = [
         { 'href': '#', 'label': ' | ' },
+        { 'href': '/admin/profile', 'label': 'Profile' },
         { 'href': '/admin/posts/write', 'label': 'Write' },
         { 'href': '/admin/posts/list', 'label': 'My Posts' },
         { 'href': '/logout', 'label': 'Sign out' },

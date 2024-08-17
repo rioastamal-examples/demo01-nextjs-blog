@@ -46,6 +46,8 @@ const schema = a.schema({
       userId: a.id().required(),
       name: a.string(),
       email: a.string(),
+      subdomain: a.string(),
+      profile: a.string(),
       posts: a.hasMany('Post', 'authorId'),
       comments: a.hasMany('Comment', 'authorId'),
   })

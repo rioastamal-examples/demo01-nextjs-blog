@@ -1,7 +1,6 @@
 import { fetchAuthSession } from 'aws-amplify/auth/server';
 import { runWithAmplifyServerContext, AuthGetCurrentUserServer, cookiesClient } from '../../../libs/server-utils';
 import { cookies } from 'next/headers';
-import slugify from '../../../libs/slugify';
 
 export async function POST(request) {
   const authenticated = await runWithAmplifyServerContext({
@@ -27,37 +26,48 @@ export async function POST(request) {
   try {
     // Get the request body
     const requestData = await request.json();
-    // Access the JSON data
-    console.log(requestData);
-    const { title, summary, content, tags, slug } = requestData;
-    const slugText = slugify(title);
+    // Access JSON data
+    const { fullname, subdomain, profile } = requestData;
 
     // Access the current user
     const user = await AuthGetCurrentUserServer();
     console.log('user =>', user);
 
-    const item = {
-      postId: `${user.userId}#${slugText}`,
-      title: title,
-      summary: summary,
-      content: content,
-      tags: tags.split(',').map((tag) => tag.trim()),
-      slug: slugText,
-      authorId: user.userId,
-      published: true
-    };
-    console.log('item =>', item);
-
-    const {errors} = await cookiesClient.models.Post.create(item, {
-      authMode: 'userPool'
-    });
-
+    // Get current user data from database
+    const { data, errors } = await cookiesClient.models.User.get(
+      { userId: user.userId },
+      { authMode: 'userPool' }
+    );
+    console.log('currentUser =>', data);
+    
     if (errors) {
       return Response.json({ "message": errors[0].message }, { status: 400 });
     }
 
-    return Response.json({ "message": "Data successfully written" });
+    // Update user profile
+    console.log('Updating user profile');
+    const item = {
+      userId: user.userId,
+      email: user.signInDetails?.loginId,
+      name: fullname,
+      subdomain: subdomain,
+      profile: profile,
+    }
+
+    console.log('item =>', item);
+    const responseUpdate = await cookiesClient.models.User.update(
+      item,
+      { authMode: 'userPool' }
+    );
+
+    console.log('responseUpdate =>', responseUpdate);
+
+    if (responseUpdate?.errors) {
+      return Response.json({ "message": errors[0].message }, { status: 400 });
+    }
+
+    return Response.json({ "message": "Data successfully updated" });
   } catch (error) {
-    return Response.json({ "message": error.toString() }, { status: 400 });
+    return Response.json({ "message": error.toString() }, { status: 403 });
   }
 }
