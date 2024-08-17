@@ -3,34 +3,6 @@ import { runWithAmplifyServerContext, AuthGetCurrentUserServer, cookiesClient } 
 import { cookies } from 'next/headers';
 import slugify from '../../../libs/slugify';
 
-export async function GET() {
-  const authenticated = await runWithAmplifyServerContext({
-    nextServerContext: { cookies },
-    operation: async (contextSpec) => {
-      try {
-        const session = await fetchAuthSession(contextSpec);
-        const user = await getCurrentUser(contextSpec);
-        return (
-          session.tokens?.accessToken !== undefined &&
-          session.tokens?.idToken !== undefined
-        );
-      } catch (error) {
-        if (error.toString().indexOf('UserUnAuthenticatedException') > -1) {
-          console.log('UserUnAuthenticatedException =>', error.toString());
-
-          return false;
-        }
-        console.log(Object.prototype.toString.call(error).slice(8, -1));
-        console.log('ERROR =>', error.toString());
-        return false;
-      }
-    }
-  });
-
-  console.log('authenticated) =>', authenticated);
-  return Response.json({ "Hello": "World" });
-}
-
 export async function POST(request) {
   const authenticated = await runWithAmplifyServerContext({
     nextServerContext: { cookies },
