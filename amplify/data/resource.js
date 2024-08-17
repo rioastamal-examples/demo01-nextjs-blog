@@ -1,20 +1,35 @@
 import { a, defineData } from '@aws-amplify/backend';
 
+// To maximize the performance and to reduce cost,
+// consider to use DynamoDB best practices when
+// modeling your data. The key is to know your
+// application access pattern first. See:
+// https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/data-modeling.html
+
+// Amplify data model list() command uses scan() operation, 
+// This is not optimal in most cases. This demo does not 
+// implements some of the best practices to make it easy for 
+// new comers to understand AWS Amplify Data
+
 // Define schema for a blog post
 const schema = a.schema({
   Post: a.model({
       postId: a.id().required(),
       title: a.string(),
-      slug: a.string(),
+      slug: a.string().required(),
       summary: a.string(),
       content: a.string(),
       published: a.boolean(),
-      type: a.enum(['post', 'page', 'other']),
+      post_type: a.enum(['post', 'page', 'other']),
       authorId: a.id(),
       author: a.belongsTo('User', 'authorId'),
       comments: a.hasMany('Comment', 'postId'),
       tags: a.string().array(),
   })
+  .secondaryIndexes((index) => [
+    index('slug')
+    .queryField('listBySlug')
+  ])
   .identifier(['postId'])
   .authorization(allow => [
     // Allow public to read the post
