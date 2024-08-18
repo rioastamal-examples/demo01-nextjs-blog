@@ -2,13 +2,8 @@ import { useAuthenticator, Input, Label, Flex, Button, Alert, TextAreaField } fr
 import React, { useEffect, useState } from 'react';
 import slugify from '../../../libs/slugify';
 
-function isObject(value) {
-  return Object.prototype.toString.call(value) === '[object Object]';
-}
-
 function Index() {
   const { authStatus, user } = useAuthenticator(context => [context.authStatus, context.user]);
-  let isAuthenticated = authStatus === 'authenticated';
   console.log('user =>', user);
 
   const [alertVariation, setAlertVariation] = useState('success');
@@ -23,12 +18,12 @@ function Index() {
       return;
     }
 
-    if (!isAuthenticated) {
-      // window.location.href = '/login';
+    if (authStatus === 'unauthenticated') {
       console.log('redirecting to /login');
-      return null;
+      window.location.href = '/login';
+      return;
     }
-  }, [isAuthenticated]);
+  }, [authStatus]);
 
   const handleTitleChange = function(title) {
     const slug = slugify(title);

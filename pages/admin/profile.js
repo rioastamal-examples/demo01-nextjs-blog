@@ -4,13 +4,8 @@ import slugify from '../../libs/slugify';
 import Head from 'next/head';
 import { generateClient } from 'aws-amplify/data';
 
-function isObject(value) {
-  return Object.prototype.toString.call(value) === '[object Object]';
-}
-
 function Index() {
   const { authStatus, user } = useAuthenticator(context => [context.authStatus, context.user]);
-  let isAuthenticated = authStatus === 'authenticated';
   console.log('user =>', user);
 
   const [alertVariation, setAlertVariation] = useState('success');
@@ -55,18 +50,18 @@ function Index() {
       return;
     }
 
-    if (!isAuthenticated) {
-      window.location.href = '/login';
+    if (authStatus === 'unauthenticated') {
       console.log('redirecting to /login');
-      return null;
+      window.location.href = '/login';
+      return;
     }
 
-    if (isAuthenticated) {
+    if (authStatus === 'authenticated') {
       setUserEmail(user.signInDetails.loginId);
       loadCurrentProfile();
     }
 
-  }, [isAuthenticated]);
+  }, [authStatus]);
 
   const writeProfile = async function(event) {
     event.preventDefault(); // Prevent the actual click

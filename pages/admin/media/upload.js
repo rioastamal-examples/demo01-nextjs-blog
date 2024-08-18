@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 
 export default function Index() {
   const { authStatus, user } = useAuthenticator(context => [context.authStatus, context.user]);
-  let isAuthenticated = authStatus === 'authenticated';
   console.log('user =>', user);
 
   const uploadSuccessFn = async ({ key }) => {
@@ -36,12 +35,12 @@ export default function Index() {
       return;
     }
 
-    if (!isAuthenticated) {
-      // window.location.href = '/login';
+    if (authStatus === 'unauthenticated') {
       console.log('redirecting to /login');
-      return null;
+      window.location.href = '/login';
+      return;
     }
-  }, [isAuthenticated]);
+  }, [authStatus]);
 
   return (
     <>

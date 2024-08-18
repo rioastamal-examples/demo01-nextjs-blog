@@ -11,7 +11,6 @@ function Index() {
   console.log('isObject =>', isObject(user));
   console.log(user);
 
-  let isAuthenticated = authStatus === 'authenticated';
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,13 +19,13 @@ function Index() {
       return;
     }
 
-    if (!isAuthenticated) {
-      // window.location.href = '/login';
+    if (authStatus === 'unauthenticated') {
       console.log('redirecting to /login');
-      return null;
+      window.location.href = '/login';
+      return;
     }
 
-    if (isAuthenticated) {
+    if (authStatus === 'authenticated') {
       async function fetchData() {
         try {
           const client = generateClient();
@@ -58,7 +57,7 @@ function Index() {
       fetchData();
     }
 
-  }, [isAuthenticated]);
+  }, [authStatus]);
 
   return (
     <>
@@ -82,7 +81,7 @@ export default Index;
 export function getStaticProps() {
   return {
     props: {
-      currentPage: '/admin/posts/list'
+      currentPage: '/admin/posts'
     }
   }
 }
