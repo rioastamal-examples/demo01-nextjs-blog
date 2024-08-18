@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { generateClient } from 'aws-amplify/data';
 import { getUrl } from 'aws-amplify/storage';
 import { Loader } from '@aws-amplify/ui-react';
+import getConfig from 'next/config';
 
 const getSignedUrl = async function(file) {
   const { url } = await getUrl({ path: file });
@@ -28,7 +29,9 @@ function ShowPictures(files) {
 }
 
 function Index() {
-  const staticUserId = '99da75ec-e001-7047-3a1e-b0a089478a47';
+  const { publicRuntimeConfig } = getConfig();
+  // const staticUserId = '99da75ec-e001-7047-3a1e-b0a089478a47';
+  const staticUserId = publicRuntimeConfig.staticUserId;
   const [currentPictures, setCurrentPictures] = useState([]);
   const [loading, setLoading] = useState(true);
 

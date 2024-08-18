@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { generateClient } from 'aws-amplify/data';
 import Head from 'next/head';
 import { Loader } from '@aws-amplify/ui-react';
+import getConfig from 'next/config';
 
 function ShowPosts({ data }) {
   // Format the date to 'Fri Mar 19 2021'
@@ -25,7 +26,9 @@ function ShowPosts({ data }) {
 }
 
 export default function Index() {
-  const staticUserId = '99da75ec-e001-7047-3a1e-b0a089478a47';
+  const { publicRuntimeConfig } = getConfig();
+  // const staticUserId = '99da75ec-e001-7047-3a1e-b0a089478a47';
+  const staticUserId = publicRuntimeConfig.staticUserId;
   const [CurrentPosts, setCurrentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
