@@ -3,12 +3,14 @@ import Head from 'next/head';
 import { generateClient } from 'aws-amplify/data';
 import Markdown from 'react-markdown';
 import getConfig from 'next/config';
+import { Loader } from '@aws-amplify/ui-react';
 
 function Index() {
   const { publicRuntimeConfig } = getConfig();
   // const staticUserId = '99da75ec-e001-7047-3a1e-b0a089478a47';
   const staticUserId = publicRuntimeConfig.staticUserId;
-  const [currentUser, setCurrentUser] = useState({})
+  const [currentUser, setCurrentUser] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const loadCurrentProfile = async function() {
     const client = generateClient();
@@ -19,8 +21,11 @@ function Index() {
       console.log('data current profile =>', data);
       console.log('errors current profile =>', errors);
       setCurrentUser(data);
+      setLoading(false);
     } catch (error) {
       console.log('Fetch current profile error =>', error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -36,8 +41,11 @@ function Index() {
             <title>{currentUser.name}&#39;s Photos</title>
           </Head>
 
+          { loading && <Loader variation="linear" size="small" /> }
+          { !loading && <>
           <h1>{currentUser.name}</h1>
           <Markdown>{currentUser.profile}</Markdown>
+          </>}
         </>
       }
     </>

@@ -1,6 +1,5 @@
-import { useAuthenticator, Input, Label, Flex, Button, Alert, TextAreaField } from '@aws-amplify/ui-react';
+import { useAuthenticator, Input, Label, Flex, Button, Alert, TextAreaField, Loader } from '@aws-amplify/ui-react';
 import React, { useEffect, useState } from 'react';
-import slugify from '../../libs/slugify';
 import Head from 'next/head';
 import { generateClient } from 'aws-amplify/data';
 
@@ -17,6 +16,7 @@ function Index() {
     profile: '',
     subdomain: ''
   });
+  const [loading, setLoading] = useState(true);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -39,9 +39,12 @@ function Index() {
         fullname: data.name ?? '',
         profile: data.profile ?? '',
         subdomain: data.subdomain ?? ''
-      })
+      });
+      setLoading(false);
     } catch (err) {
       console.log('Fetch current profile error =>', error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -150,6 +153,10 @@ function Index() {
       >
         {alertText}
       </Alert> }
+
+      { loading && <Loader variation="linear" size="small" /> }
+
+      { !loading && <>
       <form id="writeform" ref={formRef}>
         <Flex direction="column">
           <Flex direction="column" gap="small">
@@ -189,6 +196,7 @@ function Index() {
           </Button>
         </Flex>
       </form>
+      </>}
     </>
   );
 }

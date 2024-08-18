@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Markdown from 'react-markdown';
 import { generateClient } from 'aws-amplify/data';
+import { Loader } from '@aws-amplify/ui-react';
 
 function Index() {
   // Format the date to 'Fri Mar 19 2021'
@@ -15,6 +16,7 @@ function Index() {
   const slug = router.query.slug;
   const [postIsNotFound, setPostIsNotFound] = useState(false);
   const [post, setPost] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getPostBySlug = async () => {
@@ -28,6 +30,7 @@ function Index() {
       if (errors) {
         console.error(errors);
         setPostIsNotFound(true);
+        setLoading(False);
   
         return undefined;
       }
@@ -35,12 +38,14 @@ function Index() {
       console.log('data =>', data);
       if (data && data.length === 0) {
           setPostIsNotFound(true);
+          setLoading(false);
 
           return undefined;
       }
 
       setPost(data[0]);
       setPostIsNotFound(false);
+      setLoading(false);
     };
 
     getPostBySlug();
@@ -49,7 +54,9 @@ function Index() {
   return (
     <>
       {postIsNotFound && <h1>Post is not found.</h1>}
-      {post && (
+
+      { loading && <Loader variation="linear" size="small" /> }
+      {post && !loading && (
         <>
           <h1>{post.title}</h1>
           <div className="meta-line">
@@ -57,7 +64,6 @@ function Index() {
             </div>
           </div>
           <Markdown>{post.content}</Markdown>
-          {/* <p>{post.content}</p> */}
         </>
       )}
     </>

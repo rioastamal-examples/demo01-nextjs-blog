@@ -1,4 +1,4 @@
-import { useAuthenticator, Loader, Collection, Card, Link } from '@aws-amplify/ui-react';
+import { useAuthenticator, Loader, Collection, Card } from '@aws-amplify/ui-react';
 import { useEffect, useState } from 'react';
 import { generateClient } from 'aws-amplify/data';
 import { StorageImage } from '@aws-amplify/ui-react-storage';

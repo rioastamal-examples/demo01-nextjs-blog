@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { generateClient } from 'aws-amplify/data';
 import Head from 'next/head';
+import { Loader } from '@aws-amplify/ui-react';
 
 function ShowPosts({ data }) {
   // Format the date to 'Fri Mar 19 2021'
@@ -25,7 +26,8 @@ function ShowPosts({ data }) {
 
 export default function Index() {
   const staticUserId = '99da75ec-e001-7047-3a1e-b0a089478a47';
-  const [CurrentPosts, setCurrentPosts] = useState([])
+  const [CurrentPosts, setCurrentPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const loadCurrentPosts = async function() {
     const client = generateClient();
@@ -44,8 +46,11 @@ export default function Index() {
       } 
       console.log('_data =>', data);
       setCurrentPosts(data);
+      setLoading(false);
     } catch (error) {
       console.log('Fetch current posts error =>', error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -60,7 +65,10 @@ export default function Index() {
       </Head>
 
     <h1>Posts</h1>
-    <ShowPosts data={CurrentPosts} />
+    { loading && <Loader variation="linear" size="small" /> }
+    { !loading && <>
+      <ShowPosts data={CurrentPosts} />    
+    </>}
     </>
   )
 }

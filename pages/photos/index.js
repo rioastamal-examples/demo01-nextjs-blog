@@ -2,10 +2,7 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { generateClient } from 'aws-amplify/data';
 import { getUrl } from 'aws-amplify/storage';
-
-function isObject(value) {
-  return Object.prototype.toString.call(value) === '[object Object]';
-}
+import { Loader } from '@aws-amplify/ui-react';
 
 const getSignedUrl = async function(file) {
   const { url } = await getUrl({ path: file });
@@ -32,7 +29,8 @@ function ShowPictures(files) {
 
 function Index() {
   const staticUserId = '99da75ec-e001-7047-3a1e-b0a089478a47';
-  const [currentPictures, setCurrentPictures] = useState([])
+  const [currentPictures, setCurrentPictures] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const loadCurrentPictures = async function() {
     const client = generateClient();
@@ -58,8 +56,11 @@ function Index() {
       }
       console.log('_data =>', _data);
       setCurrentPictures(_data);
+      setLoading(false);
     } catch (error) {
       console.log('Fetch current images error =>', error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -74,7 +75,10 @@ function Index() {
       </Head>
 
       <h1>Pictures</h1>
-      <ShowPictures pictures={currentPictures} />
+      { loading && <Loader variation="linear" size="small" /> }
+      { !loading && <>
+        <ShowPictures pictures={currentPictures} />
+      </>}
     </>
   );
 }
