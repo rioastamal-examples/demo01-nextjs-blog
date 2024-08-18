@@ -35,10 +35,17 @@ function Index() {
 
   return (
     <>
-      { currentUser.hasOwnProperty('name') &&
+      { !currentUser &&
+        <p>Configure the STATIC_USER_ID in the next.config.js file. If you don&#39;t
+          have a user yet, <a href="/login">Sign up</a> and get the Cognito
+          userId as the STATIC_USER_ID.
+        </p>
+      }
+
+      { currentUser && currentUser.hasOwnProperty('name') &&
       <>
           <Head>
-            <title>{currentUser.name}&#39;s Photos</title>
+            <title>Demo blog</title>
           </Head>
 
           { loading && <Loader variation="linear" size="small" /> }
