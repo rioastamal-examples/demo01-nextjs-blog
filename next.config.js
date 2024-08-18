@@ -7,6 +7,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // any configs you need
+  publicRuntimeConfig: {
+    staticUserId: process.env.STATIC_USER_ID
+  }
 };
 
 // module.exports = withNextra(nextConfig);

@@ -26,10 +26,15 @@ const schema = a.schema({
       comments: a.hasMany('Comment', 'postId'),
       tags: a.string().array(),
   })
-  .secondaryIndexes((index) => [
-    index('slug')
-    .queryField('listBySlug')
-  ])
+  .secondaryIndexes((index) => 
+      [
+        index('slug')
+        .queryField('listBySlug'),
+        
+        index('authorId')
+        .queryField('listByAuthorId')
+      ]
+  )
   .identifier(['postId'])
   .authorization(allow => [
     // Allow public to read the post
@@ -54,6 +59,9 @@ const schema = a.schema({
   })
   .identifier(['userId'])
   .authorization(allow => [    
+    // Allow public to read the comment
+    allow.publicApiKey().to(['read']),
+
     // Only owner can update their own profile
     // They should not able to delete them self
     allow.owner().to(['create', 'read', 'update']),
@@ -88,6 +96,10 @@ const schema = a.schema({
       userId: a.id(),
       user: a.belongsTo('User', 'userId')
   })
+  .secondaryIndexes((index) => [
+    index('userId')
+    .queryField('listByUserId')
+  ])
   .identifier(['mediaId'])
   .authorization(allow => [
     // Allow public to read the media

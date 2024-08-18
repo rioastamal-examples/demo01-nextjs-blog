@@ -4,6 +4,13 @@ import Markdown from 'react-markdown';
 import { generateClient } from 'aws-amplify/data';
 
 function Index() {
+  // Format the date to 'Fri Mar 19 2021'
+  const formatDate = function(theDate) {
+    const date = new Date(theDate);
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  }
+
   const router = useRouter();
   const slug = router.query.slug;
   const [postIsNotFound, setPostIsNotFound] = useState(false);
@@ -45,6 +52,10 @@ function Index() {
       {post && (
         <>
           <h1>{post.title}</h1>
+          <div className="meta-line">
+            <div className="meta"><time>{formatDate(post.createdAt)}</time> • <a className="tag" href="/tags/web%20development">web development</a>
+            </div>
+          </div>
           <Markdown>{post.content}</Markdown>
           {/* <p>{post.content}</p> */}
         </>

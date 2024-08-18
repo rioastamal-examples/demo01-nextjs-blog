@@ -39,15 +39,9 @@ function Index() {
       async function fetchData() {
         try {
           const client = generateClient();
-          const { data, errors} = await client.models.Media.list({
-            limit: 50,
-            authMode: 'userPool',
-            filter: {
-              userId: {
-                eq: user.userId
-              }
-            }
-          });
+          const { data, errors} = await client.models.Media.listByUserId(
+              { userId: user.userId }
+            );
   
           console.log(data);
   
