@@ -1,5 +1,5 @@
 import { fetchAuthSession } from 'aws-amplify/auth/server';
-import { runWithAmplifyServerContext, AuthGetCurrentUserServer, cookiesClient } from '../../../libs/server-utils';
+import { runWithAmplifyServerContext, AuthGetCurrentUserServer, serverClient } from '../../../libs/server-utils';
 import { cookies } from 'next/headers';
 
 export async function POST(request) {
@@ -34,7 +34,7 @@ export async function POST(request) {
     console.log('user =>', user);
 
     // Get current user data from database
-    const { data, errors } = await cookiesClient.models.User.get(
+    const { data, errors } = await serverClient.models.User.get(
       { userId: user.userId },
       { authMode: 'userPool' }
     );
@@ -55,7 +55,7 @@ export async function POST(request) {
     }
 
     console.log('item =>', item);
-    const responseUpdate = await cookiesClient.models.User.update(
+    const responseUpdate = await serverClient.models.User.update(
       item,
       { authMode: 'userPool' }
     );

@@ -1,5 +1,5 @@
 import { fetchAuthSession } from 'aws-amplify/auth/server';
-import { runWithAmplifyServerContext, AuthGetCurrentUserServer, cookiesClient } from '../../../libs/server-utils';
+import { runWithAmplifyServerContext, AuthGetCurrentUserServer, serverClient } from '../../../libs/server-utils';
 import { cookies } from 'next/headers';
 import slugify from '../../../libs/slugify';
 
@@ -48,7 +48,7 @@ export async function POST(request) {
     };
     console.log('item =>', item);
 
-    const {errors} = await cookiesClient.models.Post.create(item, {
+    const {errors} = await serverClient.models.Post.create(item, {
       authMode: 'userPool'
     });
 

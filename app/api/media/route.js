@@ -1,5 +1,5 @@
 import { fetchAuthSession } from 'aws-amplify/auth/server';
-import { runWithAmplifyServerContext, AuthGetCurrentUserServer, cookiesClient } from '../../../libs/server-utils';
+import { runWithAmplifyServerContext, AuthGetCurrentUserServer, serverClient } from '../../../libs/server-utils';
 import { cookies } from 'next/headers';
 import crypto from 'crypto';
 
@@ -49,7 +49,7 @@ export async function POST(request) {
     };
     console.log('item =>', item);
 
-    const {errors} = await cookiesClient.models.Media.create(item, {
+    const {errors} = await serverClient.models.Media.create(item, {
       authMode: 'userPool'
     });
 

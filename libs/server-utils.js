@@ -9,7 +9,7 @@ export const { runWithAmplifyServerContext } = createServerRunner({
 });
 
 // Replacement for generateClientData()
-export const cookiesClient = generateServerClientUsingCookies({
+export const serverClient = generateServerClientUsingCookies({
   config: outputs,
   cookies,
 });
