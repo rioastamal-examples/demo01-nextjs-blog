@@ -49,7 +49,7 @@ export default function Index() {
       </Head>
 
       <h1>Upload file</h1>
-      <p>See all your uploaded files in the <a href="/admin/media/list">media page</a>.</p>
+      <p>See all your uploaded files in the <a href="/admin/media">media page</a>.</p>
       <StorageManager
         acceptedFileTypes={['image/*']}
         path={({ identityId }) => `media/blog/${identityId}/`}
