@@ -8,7 +8,8 @@
 const nextConfig = {
   // any configs you need
   publicRuntimeConfig: {
-    staticUserId: process.env.STATIC_USER_ID || ''
+    staticUserId: process.env.STATIC_USER_ID || '',
+    bucketName: process.env.BUCKET_NAME || 'demo01-nextjs-blog'
   }
 };
 
