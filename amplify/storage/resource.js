@@ -7,6 +7,7 @@ export const storage = defineStorage({
     'media/blog/{entity_id}/*': [
       // {entity_id} is the token that is replaced with the user identity id
       allow.entity('identity').to(['read', 'write', 'delete']),
+      allow.groups(['ADMINS']).to(['read', 'write', 'delete']),
       allow.guest.to(['read'])
     ],
   })
