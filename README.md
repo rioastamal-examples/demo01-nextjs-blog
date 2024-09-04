@@ -2,6 +2,19 @@
 
 Take a look at branch `journey-2.3` for a working version of a full-stack app built with AWS Amplify.
 
+# How to Deploy
+
+Steps to deploy to AWS Amplify.
+
+1. Create new AWS Amplify App
+1. Choose GitHub as Git provider
+1. Connect to this repository
+1. Choose `main` branch
+1. Enter `journey-1.0` for the application name
+1. Enter `npm run build` for Frontend build command
+1. Enter `.next` for Build output directory
+1. Save and Deploy
+
 # Portfolio Starter Kit
 
 This portfolio is built with **Next.js** and a library called [Nextra](https://nextra.vercel.app/). It allows you to write Markdown and focus on the _content_ of your portfolio. This starter includes:
